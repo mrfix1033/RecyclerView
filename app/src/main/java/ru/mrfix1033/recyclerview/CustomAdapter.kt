@@ -8,10 +8,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-class CustomAdapter(private val list: MutableList<GarderobeElement>) :
+class CustomAdapter(
+    private val list: MutableList<GarderobeElement>,
+    private val onClickListener: OnClickListener
+) :
     RecyclerView.Adapter<CustomAdapter.GarderobeElementHolderView>() {
+
+    interface OnClickListener {
+        fun onClick(position: Int)
+    }
+
     class GarderobeElementHolderView(itemView: View) : ViewHolder(itemView) {
-        val textViewName = itemView.findViewById<TextView>(R.id.textViewName)
+        val textViewTitle = itemView.findViewById<TextView>(R.id.textViewTitle)
         val textViewDescription = itemView.findViewById<TextView>(R.id.textViewDescription)
         val imageView = itemView.findViewById<ImageView>(R.id.imageView)
     }
@@ -29,10 +37,13 @@ class CustomAdapter(private val list: MutableList<GarderobeElement>) :
     override fun onBindViewHolder(holder: GarderobeElementHolderView, position: Int) {
         list[position].run {
             holder.run {
-                textViewName.setText(name)
+                textViewTitle.setText(title)
                 textViewDescription.setText(description)
                 imageView.setImageResource(image)
             }
+        }
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(position)
         }
     }
 }
